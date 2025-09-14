@@ -15,12 +15,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $time = $_POST['time'];
     $location = trim($_POST['location']);
     $seats = intval($_POST['seats']);
+    $available_seats = intval($_POST['seats']);
 
     if (empty($title) || empty($description) || empty($date) || empty($time) || empty($location) || $seats <= 0) {
         $error = 'Please fill in all fields correctly.';
     } else {
-        $stmt = $pdo->prepare("INSERT INTO workshops (title, description, date, time, location, seats) VALUES (?, ?, ?, ?, ?, ?)");
-        if ($stmt->execute([$title, $description, $date, $time, $location, $seats])) {
+       $stmt = $pdo->prepare("INSERT INTO workshops (title, description, date, time, location, seats, available_seats) VALUES (?, ?, ?, ?, ?, ?, ?)");
+
+        if ($stmt->execute([$title, $description, $date, $time, $location, $seats, $available_seats])) {
             $success = 'Workshop added successfully!';
         } else {
             $error = 'Failed to add workshop. Please try again.';
