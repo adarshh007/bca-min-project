@@ -16,6 +16,11 @@ $totalUsers = (int)$pdo->query("SELECT COUNT(*) FROM users")->fetchColumn();
 $totalRegistrations = (int)$pdo->query("SELECT COUNT(*) FROM registrations")->fetchColumn();
 $totalFeedback = (int)$pdo->query("SELECT COUNT(*) FROM feedback")->fetchColumn();
 
+// Reports: breakdown by status
+$completedWorkshops = (int)$pdo->query("SELECT COUNT(*) FROM workshops WHERE status = 'completed'")->fetchColumn();
+$upcomingWorkshops  = (int)$pdo->query("SELECT COUNT(*) FROM workshops WHERE date >= CURDATE() AND status = 'active'")->fetchColumn();
+$activeWorkshops    = (int)$pdo->query("SELECT COUNT(*) FROM workshops WHERE status = 'active'")->fetchColumn();
+
 // Recent registrations
 $recentStmt = $pdo->query("
     SELECT u.name AS user_name, w.title AS workshop_title, r.reg_date
@@ -155,6 +160,30 @@ $upcoming = $upStmt->fetchAll();
       </div>
     </div>
   </div>
+
+ <!-- Reports Card -->
+<div class="row g-4 mb-4">
+  <div class="col-md-12">
+    <a href="admin/report.php" class="text-decoration-none">
+      <div class="card text-center shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title text-dark">
+            <i class="bi bi-bar-chart"></i> Reports
+          </h5>
+          <p class="mb-1 text-muted">Workshops Conducted (Completed): 
+            <strong><?php echo $completedWorkshops; ?></strong>
+          </p>
+          <p class="mb-1 text-muted">Upcoming Workshops: 
+            <strong><?php echo $upcomingWorkshops; ?></strong>
+          </p>
+          <p class="mb-0 text-muted">Active Workshops: 
+            <strong><?php echo $activeWorkshops; ?></strong>
+          </p>
+        </div>
+      </div>
+    </a>
+  </div>
+</div>
 
   <!-- Recent Registrations + Upcoming Workshops -->
   <div class="row g-4">
